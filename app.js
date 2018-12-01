@@ -1,5 +1,13 @@
-var canvas, ctx, gameSize, turret;
+// globals
+var canvas, ctx, gameSize, turret, helicopters, bullet, bullets = [];
+const toDeg = 180 / Math.PI;
 
+const bullet_velocity = [1, 1];
+var velocity = {x: 1.8, y: -1.2};
+
+var frame_count = 0;
+
+// classes
 class Bullet {
   // set the location of the bullet
   constructor(position_x, position_y, angle, velocity) {
@@ -16,6 +24,16 @@ class Bullet {
     return this._position_y;
   }
   get angle() {
+    return this._angle;
+  }
+
+  set position_x(position_x) {
+    this._position_x = position_x;
+  }
+  set position_y(position_y) {
+    return this._position_y;
+  }
+  set angle(angle) {
     return this._angle;
   }
 
@@ -36,9 +54,9 @@ class Bullet {
   detectCollision() {}
 
   display() {
-    drawing = new Image();
+    let drawing = new Image();
     drawing.src =
-        '/resources/turret.png';  // can also be a remote URL e.g. http://
+        'resources/bullet.png';  // can also be a remote URL e.g. http://
     ctx.drawImage(drawing, turret.x, turret.y);
   }
 }
@@ -103,33 +121,20 @@ class Turret {
   }
 }
 
-var troopers = [];
-var bullets = [];
-var debris = [];
-var helicopters = [];
-var turret = new Turret(200, 380);
-
-const toDeg = 180 / Math.PI;
-
-const bullet_velocity = [1, 1];
-var velocity = {x: 1.8, y: -1.2};
-
-var frame_count = 0;
-
-// Debris Helicopter Trooper
-
+// Input
 function keyDown(event) {
   if (event.code == 'ArrowLeft') {
-    alert('rotate left');
+    turret.x -= 10;
   } else if (event.code == 'ArrowRight') {
-    alert('rotate right');
+    turret.x += 10;
   } else if (event.code == 'Space') {
-    bullets.push(new Bullet(x, y, turret.getAngle(), bullet_velocity));
+    bullets.push(new Bullet(0, 0, turret.angle, bullet_velocity));
   }
 }
 
 window.addEventListener('keydown', keyDown);
 
+// INIT
 function init() {
   // Creates window for game
   canvas = document.createElement('canvas');
@@ -143,14 +148,19 @@ function init() {
 
   gameState = true;
   map = [];
-  set = setInterval(draw, 5);
+  set = setInterval(draw, 1);
+
+  var troopers = [];
+  bullets = [];
+  bullet = new Bullet()
+  var debris = [];
+  var helicopters = [];
 
   turret = new Turret();
-  console.log(turret);
-
   return;
 }
 
+// DRAW
 function draw() {
   // Clears previous drawings
   ctx.clearRect(0, 0, gameSize.x, gameSize.y);
@@ -166,16 +176,14 @@ function draw() {
   });
 
   bullets.forEach(function(bullet) {
-    // bullet.display();
+    bullet.display();
   });
 
+  bullet.display();
   turret.display();
 }
 
-// function win(player) {}
-
-onkeydown = onkeyup = function(e) {};
-
+// START
 window.addEventListener('load', function() {
   // starts game
   init();
