@@ -34,4 +34,6 @@ function onKeyDown(event) {
   }
 }
 
-function objectToRaster() {}
+function objectToRaster() {
+  
+}
