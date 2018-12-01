@@ -17,8 +17,17 @@ export default class Bullet {
     return this._angle;
   }
 
+  set position_x(position){
+    this._position_x = position;
+  }
+  set position_y(position){
+    this._position_y = position;
+  }
+  set angle(angle){
+    this._angle = sangle;
+
   move(){
-    while True{
+    while (True){
       if (this.angle >= (Math.pi)/2){
         const angle_temp = ((Math.pi)*2)-this.angle;
         this.position_x += this.velocity*Math.cos(angle_temp)*0.0001;

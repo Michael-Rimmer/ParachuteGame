@@ -1,3 +1,7 @@
+import Turret from './js/Turret.js'
+import Bullet from './js/Bullet.js'
+import {Helicopter, Trooper} from './Helicopter.js'
+
 var troopers = [];
 var bullets = [];
 var debris = [];
