@@ -1,4 +1,4 @@
-class Helicoptor {
+export default class Helicoptor {
   constructor() {
     if (Math.round(Math.random())) {
       this.direction = 'l';
@@ -12,8 +12,17 @@ class Helicoptor {
     this.velocity = 0;
   }
 
+  move() {
+    if (this.direction == 'r') {
+      this.x += 10;
+    } else {
+      this.x -= 10;
+    }
+  }
+
   display() {
-    return (this.x, this.y, this.direction);
+    this.move();
+    return [this.x, this.y, this.direction];
   }
 
   hit() {}
