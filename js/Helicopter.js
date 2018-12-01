@@ -1,5 +1,10 @@
+<<<<<<< HEAD
+class Helicopter {
+  constructor(ctx) {
+=======
 export default class Helicoptor {
   constructor() {
+>>>>>>> 258dc9132538be99db19b0a1b687b8fc5fcdc7f0
     if (Math.round(Math.random())) {
       this.direction = 'l';
       this.x = 400;
@@ -10,6 +15,8 @@ export default class Helicoptor {
       this.y = 20;
     }
     this.velocity = 0;
+    this.ctx = ctx;
+    update();
   }
 
   move() {
@@ -26,10 +33,24 @@ export default class Helicoptor {
   }
 
   hit() {}
+
+  update(){
+    helicoper = new Image();
+    helicoper.src = '../resources/helicoper.png';
+    ctx.drawImage(helicopter, x, y);
+  }
 }
 
-class Trooper extends Helicoptor {
+class Trooper extends Helicopter {
   constructor() {
     super();
   }
+
+  update(){
+    trooper = new Image();
+    helicoper.src = '../resources/trooper.png';
+    ctx.drawImage(troopers, x, y);
+  }
 }
+
+export default {Helicopter, Trooper};

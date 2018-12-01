@@ -39,7 +39,7 @@ class Bullet {
     drawing = new Image();
     drawing.src =
         '/resources/bullet.png';  // can also be a remote URL e.g. http://
-    ctx.drawImage(drawing, turret.x, turret.y);
+    ctx.drawImage(drawing, this.x, this.y);
   }
 }
 
@@ -132,9 +132,9 @@ var frame_count = 0;
 
 function keyDown(event) {
   if (event.code == 'ArrowLeft') {
-    alert('rotate left');
+    turret.x += 10;
   } else if (event.code == 'ArrowRight') {
-    alert('rotate right');
+    turret.x -= 10;
   } else if (event.code == 'Space') {
     // bullets.push(new Bullet(x, y, turret.getAngle(), bullet_velocity));
   }
@@ -172,7 +172,7 @@ function init() {
 
 function draw() {
   // Clears previous drawings
-  // ctx.clearRect(0, 0, gameSize.x, gameSize.y);
+  ctx.clearRect(0, 0, gameSize.x, gameSize.y);
 
   // frame_count = (frame_count + 1) % 120;
   // // Each frame, rotate the path by 3 degrees:
