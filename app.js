@@ -1,4 +1,4 @@
-var canvas, ctx, gameSize, turret;
+var canvas, ctx, gameSize, turret, helicopters;
 
 class Bullet {
   // set the location of the bullet
@@ -38,7 +38,7 @@ class Bullet {
   display() {
     drawing = new Image();
     drawing.src =
-        '/resources/turret.png';  // can also be a remote URL e.g. http://
+        '/resources/bullet.png';  // can also be a remote URL e.g. http://
     ctx.drawImage(drawing, turret.x, turret.y);
   }
 }
@@ -71,17 +71,34 @@ class Helicoptor {
   }
 
   hit() {}
+
+  display() {
+    let drawing = new Image();
+    drawing.src =
+        'resources/helicopter.png';  // can also be a remote URL e.g. http://
+    ctx.drawImage(drawing, this.x, this.y);
+  }
 }
 
 class Trooper extends Helicoptor {
   constructor() {
     super();
   }
+
+  display() {
+    let drawing = new Image();
+    drawing.src =
+        'resources/trooper.png';  // can also be a remote URL e.g. http://
+    ctx.drawImage(drawing, this.x, this.y);
+  }
 }
 
 class Turret {
   constructor() {
     this.angle = 0;
+    this.x = 0;
+    this.y = 0;
+    this.display();
   }
 
   get angle() {
@@ -95,19 +112,14 @@ class Turret {
       // throw 'Angle beyond the exceeded amount';
     }
   }
+
   display() {
     let drawing = new Image();
     drawing.src =
-        '/resources/turret.png';  // can also be a remote URL e.g. http://
-    ctx.drawImage(drawing, turret.x, turret.y);
+        'resources/turret.png';  // can also be a remote URL e.g. http://
+    ctx.drawImage(drawing, this.x, this.y);
   }
 }
-
-var troopers = [];
-var bullets = [];
-var debris = [];
-var helicopters = [];
-var turret = new Turret(200, 380);
 
 const toDeg = 180 / Math.PI;
 
@@ -124,7 +136,7 @@ function keyDown(event) {
   } else if (event.code == 'ArrowRight') {
     alert('rotate right');
   } else if (event.code == 'Space') {
-    bullets.push(new Bullet(x, y, turret.getAngle(), bullet_velocity));
+    // bullets.push(new Bullet(x, y, turret.getAngle(), bullet_velocity));
   }
 }
 
@@ -143,31 +155,38 @@ function init() {
 
   gameState = true;
   map = [];
-  set = setInterval(draw, 5);
+  set = setInterval(draw, 1000);
 
+  var troopers = [];
+  var bullets = [];
+  var debris = [];
+  var helicopters = [];
+
+  console.log('it works ', ctx);
   turret = new Turret();
   console.log(turret);
+  turret.display();
 
   return;
 }
 
 function draw() {
   // Clears previous drawings
-  ctx.clearRect(0, 0, gameSize.x, gameSize.y);
+  // ctx.clearRect(0, 0, gameSize.x, gameSize.y);
 
-  frame_count = (frame_count + 1) % 120;
-  // Each frame, rotate the path by 3 degrees:
-  if (frame_count == 119) {
-    let foo = new Helicoptor();
-    helicopters.push(foo);
-  }
-  helicopters.forEach(function(helicopter) {
-    // helicopter.display();
-  });
+  // frame_count = (frame_count + 1) % 120;
+  // // Each frame, rotate the path by 3 degrees:
+  // if (frame_count == 119) {
+  //   let foo = new Helicoptor();
+  //   helicopters.push(foo);
+  // }
+  // helicopters.forEach(function(helicopter) {
+  //   // helicopter.display();
+  // });
 
-  bullets.forEach(function(bullet) {
-    // bullet.display();
-  });
+  // bullets.forEach(function(bullet) {
+  //   // bullet.display();
+  // });
 
   turret.display();
 }
