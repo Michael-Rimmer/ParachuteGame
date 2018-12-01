@@ -4,6 +4,12 @@ var debris = [];
 var helicopters = [];
 var turret = new Turret();
 
+var troopers_img = [];
+var bullets_img = [];
+var debris_img = [];
+var helicopters_img = [];
+var turret_img;
+
 const bullet_velocity = 1;
 
 var frame_count = 0;
@@ -35,5 +41,5 @@ function onKeyDown(event) {
 }
 
 function objectToRaster() {
-  
+
 }
