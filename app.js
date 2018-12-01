@@ -1,77 +1,182 @@
+var canvas, ctx, gameSize, turret;
+
+class Bullet {
+  // set the location of the bullet
+  constructor(position_x, position_y, angle, velocity) {
+    this.position_x = position_x;
+    this.position_y = position_y;
+    this.angle = angle;
+    this.velocity = velocity;
+  }
+
+  get position_x() {
+    return this._position_x;
+  }
+  get position_y() {
+    return this._position_y;
+  }
+  get angle() {
+    return this._angle;
+  }
+
+  move() {
+    while (True) {
+      if (this.angle >= (Math.pi) / 2) {
+        const angle_temp = ((Math.pi) * 2) - this.angle;
+        this.position_x += this.velocity * Math.cos(angle_temp) * 0.0001;
+        this.position_y -= this.velocity * Math.sin(angle_temp) * 0.0001;
+      } else {
+        this.position_x -= this.velocity * Math.cos(angle_temp) * 0.0001;
+        this.position_y -= this.velocity * Math.sin(angle_temp) * 0.0001;
+      }
+    }
+  }
+
+  // detect collision of the bullet with end of the frame and helicopers
+  detectCollision() {}
+
+  display() {
+    drawing = new Image();
+    drawing.src =
+        '/resources/turret.png';  // can also be a remote URL e.g. http://
+    ctx.drawImage(drawing, turret.x, turret.y);
+  }
+}
+
+class Helicoptor {
+  constructor() {
+    if (Math.round(Math.random())) {
+      this.direction = 'l';
+      this.x = 400;
+      this.y = 20;
+    } else {
+      this.direction = 'r';
+      this.x = 0;
+      this.y = 20;
+    }
+    this.velocity = 0;
+  }
+
+  move() {
+    if (this.direction == 'r') {
+      this.x += 10;
+    } else {
+      this.x -= 10;
+    }
+  }
+
+  display() {
+    this.move();
+    return [this.x, this.y, this.direction];
+  }
+
+  hit() {}
+}
+
+class Trooper extends Helicoptor {
+  constructor() {
+    super();
+  }
+}
+
+class Turret {
+  constructor() {
+    this.angle = 0;
+  }
+
+  get angle() {
+    return this._angle;
+  }
+
+  set angle(angle) {
+    if (angle >= 0 && angle <= Math.pi) {
+      this._angle = angle;
+    } else {
+      // throw 'Angle beyond the exceeded amount';
+    }
+  }
+  display() {
+    let drawing = new Image();
+    drawing.src =
+        '/resources/turret.png';  // can also be a remote URL e.g. http://
+    ctx.drawImage(drawing, turret.x, turret.y);
+  }
+}
+
 var troopers = [];
 var bullets = [];
 var debris = [];
 var helicopters = [];
 var turret = new Turret(200, 380);
 
-var troopers_img = [];
-var bullets_img = [];
-var debris_img = [];
-var helicopters_img = [];
-var turret_img;
+const toDeg = 180 / Math.PI;
 
-const toDeg = 180/Math.PI;
-
-const bullet_velocity = 1;
+const bullet_velocity = [1, 1];
+var velocity = {x: 1.8, y: -1.2};
 
 var frame_count = 0;
 
 // Debris Helicopter Trooper
 
-window.onload = function() {
-}();
+function keyDown(event) {
+  if (event.code == 'ArrowLeft') {
+    alert('rotate left');
+  } else if (event.code == 'ArrowRight') {
+    alert('rotate right');
+  } else if (event.code == 'Space') {
+    bullets.push(new Bullet(x, y, turret.getAngle(), bullet_velocity));
+  }
+}
 
-function onFrame(event) {
-  clearRasters();
+window.addEventListener('keydown', keyDown);
+
+function init() {
+  // Creates window for game
+  canvas = document.createElement('canvas');
+  canvas.width = 400;
+  canvas.height = 400;
+  canvas.style.border = '2px solid #a42bff';
+  ctx = canvas.getContext('2d');
+  document.body.appendChild(canvas);
+
+  gameSize = {x: canvas.width, y: canvas.height};
+
+  gameState = true;
+  map = [];
+  set = setInterval(draw, 5);
+
+  turret = new Turret();
+  console.log(turret);
+
+  return;
+}
+
+function draw() {
+  // Clears previous drawings
+  ctx.clearRect(0, 0, gameSize.x, gameSize.y);
+
   frame_count = (frame_count + 1) % 120;
   // Each frame, rotate the path by 3 degrees:
   if (frame_count == 119) {
-    helicopters.push(new Helicopter());
+    let foo = new Helicoptor();
+    helicopters.push(foo);
   }
-  if(Key.isDown('right')){
-    turret.rotate(90);
-  } else if(Key.isDown('left')) {
-    turret.rotate(-3);
-  }
-  objectToRaster();
-}
-
-function onKeyDown(event) {
-  if (event.key = " ") {
-    bullets.push(new Bullet(x, y, turret.getAngle(), bullet_velocity)); // TODO
-  }
-}
-
-function objectToRaster() {
-  clearRasters();
-
-  turret_img = new Raster('turret');
-  turret_img.rotate(turret.getAngle() * toDeg - 90);
-  turret_img.position = newPoint(turret.getPosition_x(), turret.getPosition_y())
-
   helicopters.forEach(function(helicopter) {
-    helicopter_img = new Raster('helicopter')
-    helicopter_img.position = new Point(helicopter.display()[0], helicopter.display()[1]);
-    if (helicopter.display()[2] === 'r') {
-      // mirrorimage
-    }
-
-    helicopters_img.push(helicopter_img);
+    // helicopter.display();
   });
 
   bullets.forEach(function(bullet) {
-    bullet_img = new Raster('bullet')
-    bullet_img.position = new Point(bullet.getPosition_x(), bullet.getPosition_y());
-    bullet_img.rotate(bullet.getAngle() * toDeg - 90);
-
-    bullets_img.push(helicopter_img);
+    // bullet.display();
   });
+
+  turret.display();
 }
 
-function clearRasters() {
-  var troopers_img = [];
-  var bullets_img = [];
-  var debris_img = [];
-  var helicopters_img = [];
-  var turret_img = null;
-}
+// function win(player) {}
+
+onkeydown = onkeyup = function(e) {};
+
+window.addEventListener('load', function() {
+  // starts game
+  init();
+});
